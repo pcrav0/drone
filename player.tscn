@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://d2kspyadfftor" path="res://player.gd" id="1_4flbx"]
 [ext_resource type="PackedScene" uid="uid://bgonv64wdajlc" path="res://drone.glb" id="2_onrkg"]
+[ext_resource type="PackedScene" uid="uid://2qy6fbso1wio" path="res://helices.glb" id="3_i3pqv"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_dgfsc"]
 
@@ -9,6 +10,7 @@
 script = ExtResource("1_4flbx")
 
 [node name="drone" parent="." unique_id=2067422827 instance=ExtResource("2_onrkg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.05, 0, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1220111063]
 shape = SubResource("CapsuleShape3D_dgfsc")
@@ -16,4 +18,18 @@ shape = SubResource("CapsuleShape3D_dgfsc")
 [node name="Cabeca" type="Node3D" parent="." unique_id=1058032853]
 
 [node name="Camera3D" type="Camera3D" parent="Cabeca" unique_id=1979452329]
-transform = Transform3D(1, -1.4950174e-08, -2.636117e-09, 1.4950173e-08, 0.9396927, 0.34202015, -2.6361209e-09, -0.34202015, 0.9396927, -8.940697e-08, 2.5, 3.2)
+transform = Transform3D(1, -1.4950174e-08, -2.636117e-09, 1.4950173e-08, 0.9396927, 0.34202015, -2.6361209e-09, -0.34202015, 0.9396927, 0.1, 2.5, 3.2)
+
+[node name="Asa" type="Node3D" parent="." unique_id=1237396792]
+
+[node name="A" parent="Asa" unique_id=694852632 instance=ExtResource("3_i3pqv")]
+transform = Transform3D(0.008, 0, 0, 0, 0.008, 0, 0, 0, 0.008, 0.37, 0.41, -0.584)
+
+[node name="B" parent="Asa" unique_id=1612341311 instance=ExtResource("3_i3pqv")]
+transform = Transform3D(0.008, 0, 0, 0, 0.008, 0, 0, 0, 0.008, 0.33000004, 0.41, 0.15599996)
+
+[node name="C" parent="Asa" unique_id=1087293797 instance=ExtResource("3_i3pqv")]
+transform = Transform3D(0.008, 0, 0, 0, 0.008, 0, 0, 0, 0.008, -0.4, 0.41, 0.142)
+
+[node name="D" parent="Asa" unique_id=1452333481 instance=ExtResource("3_i3pqv")]
+transform = Transform3D(0.008, 0, 0, 0, 0.008, 0, 0, 0, 0.008, -0.41500005, 0.41, -0.58899987)

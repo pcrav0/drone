@@ -1,8 +1,8 @@
 extends Node3D
 
+@onready var db := SQLite.new()
 
 func _ready() -> void:
-	var db := SQLite.new()
 	db.path = "res://db.db"
 	db.open_db()
 
@@ -16,14 +16,15 @@ func _ready() -> void:
 		}
 	)
 
-	db.insert_row("save", {
-		 "date": int(Time.get_unix_time_from_system()),
-		 "pos-x": $Player.position.x,
-		 "pos-y": $Player.position.y,
-		 "pos-z": $Player.position.z,
-	})
-	
-	db.close_db()
+func _notification(what):
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		db.insert_row("save", {
+			 "date": int(Time.get_unix_time_from_system()),
+			 "pos-x": $Player.position.x,
+			 "pos-y": $Player.position.y,
+			 "pos-z": $Player.position.z,
+		})
+		db.close_db()
 
 func _process(_delta: float) -> void:
 	pass

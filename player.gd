@@ -31,6 +31,8 @@ func _process(_delta: float) -> void:
 		camera_i += 1
 		camera_i %= camera_offets.size()
 
+var s := 0.0
+
 func _physics_process(delta: float) -> void:
 	if position.y <= -10: # caiu mto, volta pro comeco
 		position = Vector3.ZERO
@@ -54,5 +56,10 @@ func _physics_process(delta: float) -> void:
 
 	velocity.y += get_gravity().y * delta
 	velocity.y = clamp(velocity.y, -VELOCIDADE_VOO_MAX, VELOCIDADE_VOO_MAX)
+
+	$Asa/A.rotate_y(delta * s + 0.1)
+	s += max(velocity.y, 0.0) * 0.05
+	s -= 0.1
+	s = clamp(s, 0.0, 30)
 
 	move_and_slide()
