@@ -5,6 +5,9 @@ const VELOCIDADE_VOO = 20.0
 const VELOCIDADE_VOO_MAX = 30.0
 const MOUSE_SENSIBILIDADE = 0.01
 
+var camera_i := 0
+@onready var camera_offets := [Vector3(0, 0.6, -0.3), $Cabeca/Camera3D.position]
+
 func _enter_tree() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -21,6 +24,12 @@ func _input(event: InputEvent):
 	rotate_y(-event.relative.x * MOUSE_SENSIBILIDADE)
 	$Cabeca.rotate_x(-event.relative.y * MOUSE_SENSIBILIDADE)
 	$Cabeca.rotation.x = clamp($Cabeca.rotation.x, -PI / 2, PI / 2)
+
+func _process(_delta: float) -> void:
+	if Input.is_action_just_pressed("camera"):
+		$Cabeca/Camera3D.position = camera_offets[camera_i]
+		camera_i += 1
+		camera_i %= camera_offets.size()
 
 func _physics_process(delta: float) -> void:
 	if position.y <= -10: # caiu mto, volta pro comeco
