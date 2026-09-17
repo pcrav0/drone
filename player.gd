@@ -8,6 +8,9 @@ const MOUSE_SENSIBILIDADE = 0.01
 var camera_i := 0
 @onready var camera_offets := [Vector3(0, 0.6, -0.3), $Cabeca/Camera3D.position]
 
+var aceleracao_das_asas := 0.0
+const ACELERACAO_DAS_ASAS_BASE := 0.1
+
 func _enter_tree() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -30,8 +33,6 @@ func _process(_delta: float) -> void:
 		$Cabeca/Camera3D.position = camera_offets[camera_i]
 		camera_i += 1
 		camera_i %= camera_offets.size()
-
-var s := 0.0
 
 func _physics_process(delta: float) -> void:
 	if position.y <= -10: # caiu mto, volta pro comeco
@@ -57,9 +58,12 @@ func _physics_process(delta: float) -> void:
 	velocity.y += get_gravity().y * delta
 	velocity.y = clamp(velocity.y, -VELOCIDADE_VOO_MAX, VELOCIDADE_VOO_MAX)
 
-	$Asa/A.rotate_y(delta * s + 0.1)
-	s += max(velocity.y, 0.0) * 0.05
-	s -= 0.1
-	s = clamp(s, 0.0, 30)
+	for i in range($Asa.get_children().size()):
+		var it := $Asa.get_child(i)
+		var n : int = -1 if i % 2 == 0 else 1
+		it.rotate_y(n*delta*aceleracao_das_asas + n*ACELERACAO_DAS_ASAS_BASE)
+		aceleracao_das_asas += max(velocity.y, 0.0) * 0.05
+		aceleracao_das_asas -= 0.1
+		aceleracao_das_asas = clamp(aceleracao_das_asas, 0.0, 30)
 
 	move_and_slide()

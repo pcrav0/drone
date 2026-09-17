@@ -32,4 +32,4 @@ transform = Transform3D(0.008, 0, 0, 0, 0.008, 0, 0, 0, 0.008, 0.33000004, 0.41,
 transform = Transform3D(0.008, 0, 0, 0, 0.008, 0, 0, 0, 0.008, -0.4, 0.41, 0.142)
 
 [node name="D" parent="Asa" unique_id=1452333481 instance=ExtResource("3_i3pqv")]
-transform = Transform3D(0.008, 0, 0, 0, 0.008, 0, 0, 0, 0.008, -0.41500005, 0.41, -0.58899987)
+transform = Transform3D(0.008, 0, 0, 0, 0.008, 0, 0, 0, 0.008, -0.41500017, 0.41, -0.5889997)
