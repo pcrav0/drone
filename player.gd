@@ -4,6 +4,7 @@ const VELOCIDADE_HORIZONTAL = 500.0
 const VELOCIDADE_VOO = 20.0
 const VELOCIDADE_VOO_MAX = 30.0
 const MOUSE_SENSIBILIDADE = 0.01
+const MASSA = 0.1
 
 var camera_i := 0
 @onready var camera_offets := [Vector3(0, 0.6, -0.3), $Cabeca/Camera3D.position]
@@ -35,6 +36,8 @@ func _process(_delta: float) -> void:
 		camera_i %= camera_offets.size()
 
 func _physics_process(delta: float) -> void:
+	var velocidade_antiga := velocity
+
 	if position.y <= -10: # caiu mto, volta pro comeco
 		position = Vector3.ZERO
 		position.y = 2
@@ -43,20 +46,24 @@ func _physics_process(delta: float) -> void:
 	var input_dir := Input.get_vector("esquerda", "direita", "frente", "tras")
 	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 
-	if direction:
-		velocity.x = direction.x * VELOCIDADE_HORIZONTAL * delta
-		velocity.z = direction.z * VELOCIDADE_HORIZONTAL * delta
-	else:
-		velocity.x = move_toward(velocity.x, 0, VELOCIDADE_HORIZONTAL) * delta
-		velocity.z = move_toward(velocity.z, 0, VELOCIDADE_HORIZONTAL) * delta
-	
+	direction += Vector3(0, 1, 0)
+	direction *= 0.75
+
 	if Input.is_action_pressed("cima"):
-		velocity.y += VELOCIDADE_VOO * delta
+		velocity += direction * VELOCIDADE_VOO * delta
 	elif Input.is_action_pressed("baixo"):
-		velocity.y -= VELOCIDADE_VOO * delta
+		velocity -= direction * VELOCIDADE_VOO * delta
 
 	velocity.y += get_gravity().y * delta
 	velocity.y = clamp(velocity.y, -VELOCIDADE_VOO_MAX, VELOCIDADE_VOO_MAX)
+
+	var delta_vel := velocity - velocidade_antiga
+	var aceleracao := delta_vel / delta
+	var forca := MASSA * aceleracao
+	print(aceleracao, " ", forca)
+
+	if is_on_floor() and not (Input.is_action_pressed("cima") || Input.is_action_pressed("baixo")):
+		velocity = Vector3.ZERO
 
 	for i in range($Asa.get_children().size()):
 		var it := $Asa.get_child(i)
