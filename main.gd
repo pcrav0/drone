@@ -3,6 +3,7 @@ extends Node3D
 @onready var db := SQLite.new()
 
 func _ready() -> void:
+	set_process_input(true)
 	db.path = "res://db.db"
 	db.open_db()
 
@@ -16,8 +17,8 @@ func _ready() -> void:
 		}
 	)
 
-func _notification(what):
-	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+func _notification(evento):
+	if evento == NOTIFICATION_WM_CLOSE_REQUEST:
 		db.insert_row("save", {
 			 "date": int(Time.get_unix_time_from_system()),
 			 "pos-x": $Player.position.x,
@@ -27,4 +28,5 @@ func _notification(what):
 		db.close_db()
 
 func _process(_delta: float) -> void:
-	pass
+	if Input.is_action_just_pressed("pausar"):
+		$Player.get_tree().paused = !$Player.get_tree().paused

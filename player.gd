@@ -5,12 +5,16 @@ const VELOCIDADE_VOO = 20.0
 const VELOCIDADE_VOO_MAX = 30.0
 const MOUSE_SENSIBILIDADE = 0.01
 const MASSA = 0.1
+const JOYSTICK_CAMERA_SENSIBILIDADE = 0.05
 
 var camera_i := 0
 @onready var camera_offets := [Vector3(0, 0.6, -0.3), $Cabeca/Camera3D.position]
 
 var aceleracao_das_asas := 0.0
 const ACELERACAO_DAS_ASAS_BASE := 0.1
+
+var camera_move_x: float = 0
+var camera_move_y: float = 0
 
 func _enter_tree() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
@@ -23,13 +27,24 @@ func _read():
 	set_process_input(true)
 
 func _input(event: InputEvent):
-	if not event is InputEventMouse:
-		return
-	rotate_y(-event.relative.x * MOUSE_SENSIBILIDADE)
-	$Cabeca.rotate_x(-event.relative.y * MOUSE_SENSIBILIDADE)
-	$Cabeca.rotation.x = clamp($Cabeca.rotation.x, -PI / 2, PI / 2)
+	if event is InputEventJoypadMotion:
+		match event.axis:
+			2:
+				camera_move_x = -event.axis_value
+			3:
+				camera_move_y = -event.axis_value
+
+	match event:
+		InputEventMouse:
+			rotate_y(-event.relative.x * MOUSE_SENSIBILIDADE)
+			$Cabeca.rotate_x(-event.relative.y * MOUSE_SENSIBILIDADE)
+			$Cabeca.rotation.x = clamp($Cabeca.rotation.x, -PI / 2, PI / 2)
 
 func _process(_delta: float) -> void:
+	rotate_y(camera_move_x * JOYSTICK_CAMERA_SENSIBILIDADE)
+	$Cabeca.rotate_x(camera_move_y * JOYSTICK_CAMERA_SENSIBILIDADE)
+	$Cabeca.rotation.x = clamp($Cabeca.rotation.x, -PI / 2, PI / 2)
+
 	if Input.is_action_just_pressed("camera"):
 		$Cabeca/Camera3D.position = camera_offets[camera_i]
 		camera_i += 1
@@ -57,10 +72,11 @@ func _physics_process(delta: float) -> void:
 	velocity.y += get_gravity().y * delta
 	velocity.y = clamp(velocity.y, -VELOCIDADE_VOO_MAX, VELOCIDADE_VOO_MAX)
 
-	var delta_vel := velocity - velocidade_antiga
-	var aceleracao := delta_vel / delta
-	var forca := MASSA * aceleracao
-	print(aceleracao, " ", forca)
+	if false:
+		var delta_vel := velocity - velocidade_antiga
+		var aceleracao := delta_vel / delta
+		var forca := MASSA * aceleracao
+		print(aceleracao, " ", forca)
 
 	if is_on_floor() and not (Input.is_action_pressed("cima") || Input.is_action_pressed("baixo")):
 		velocity = Vector3.ZERO
