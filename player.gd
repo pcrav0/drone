@@ -6,6 +6,7 @@ const VELOCIDADE_VOO_MAX = 30.0
 const MOUSE_SENSIBILIDADE = 0.01
 const MASSA = 0.1
 const JOYSTICK_CAMERA_SENSIBILIDADE = 0.05
+const ROTACAO_SENSIBILIDADE = 5
 
 var camera_i := 0
 @onready var camera_offets := [Vector3(0, 0.6, -0.3), $Cabeca/Camera3D.position]
@@ -13,8 +14,8 @@ var camera_i := 0
 var aceleracao_das_asas := 0.0
 const ACELERACAO_DAS_ASAS_BASE := 0.1
 
-var camera_move_x: float = 0
-var camera_move_y: float = 0
+var rotacao_x: float = 0
+var rotacao_y: float = 0
 
 func _enter_tree() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
@@ -27,13 +28,12 @@ func _read():
 	set_process_input(true)
 
 func _input(event: InputEvent):
-	print(event)
 	if event is InputEventJoypadMotion:
-		match event.axis:
+		match event.axis: # BUG: se isso nao for colocado em uma fila pode se perder valores
 			2:
-				camera_move_x = -event.axis_value
+				rotacao_x = -event.axis_value
 			3:
-				camera_move_y = -event.axis_value
+				rotacao_y = -event.axis_value
 
 	match event:
 		InputEventMouse:
@@ -42,9 +42,10 @@ func _input(event: InputEvent):
 			$Cabeca.rotation.x = clamp($Cabeca.rotation.x, -PI / 2, PI / 2)
 
 func _process(_delta: float) -> void:
-	rotate_y(camera_move_x * JOYSTICK_CAMERA_SENSIBILIDADE)
-	$Cabeca.rotate_x(camera_move_y * JOYSTICK_CAMERA_SENSIBILIDADE)
-	$Cabeca.rotation.x = clamp($Cabeca.rotation.x, -PI / 2, PI / 2)
+	if false:
+		rotate_y(rotacao_x * JOYSTICK_CAMERA_SENSIBILIDADE)
+		$Cabeca.rotate_x(rotacao_y * JOYSTICK_CAMERA_SENSIBILIDADE)
+		$Cabeca.rotation.x = clamp($Cabeca.rotation.x, -PI / 2, PI / 2)
 
 	if Input.is_action_just_pressed("camera"):
 		$Cabeca/Camera3D.position = camera_offets[camera_i]
@@ -78,6 +79,24 @@ func _physics_process(delta: float) -> void:
 		var aceleracao := delta_vel / delta
 		var forca := MASSA * aceleracao
 		print(aceleracao, " ", forca)
+
+	if true:
+		print(rotation)
+		var c := ROTACAO_SENSIBILIDADE * delta
+		if abs(rotacao_x) > 0.1 or abs(rotacao_y) > 0.1:
+			quaternion *= Quaternion(Vector3(0, 0, 1), rotacao_x * c)
+			quaternion *= Quaternion(Vector3(1, 0, 0), -1 * rotacao_y * c)
+		if abs(rotation.z) >= 0.1:
+			quaternion *= Quaternion(Vector3(0, 0, 1), -1 * sign(rotation.z) * c/5)
+		if abs(rotation.x) >= 0.1:
+			quaternion *= Quaternion(Vector3(1, 0, 0), -1 * sign(rotation.x) * c/5)
+		#quaternion *= Quaternion(Vector3(0, 0, 1), move_toward(rotation.z, 0, sign(rotation.z) * c))
+		#rotate_x(-1 * rotacao_x * ROTACAO_SENSIBILIDADE * delta)
+		#rotate_x(move_toward(rotation.x, 0, 0.01))
+		#rotate_x(rotate_toward(rotation.x, 0, 0.5))
+		#rotate_z(-1 * rotacao_y * ROTACAO_SENSIBILIDADE * delta)
+		#var c = 0.01
+		#rotate_z(move_toward(rotation.z, 0, 0.01))
 
 	if is_on_floor() and not (Input.is_action_pressed("cima") || Input.is_action_pressed("baixo")):
 		velocity = Vector3.ZERO

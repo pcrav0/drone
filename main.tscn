@@ -27,8 +27,8 @@ layer = -1
 
 [node name="Pausa" type="ColorRect" parent="CanvasLayer" unique_id=1606571794]
 process_mode = 3
-offset_right = 639.0
-offset_bottom = 479.0
+offset_right = 952.0
+offset_bottom = 700.0
 color = Color(0, 0, 0, 0.21176471)
 script = ExtResource("3_h2yge")
 
