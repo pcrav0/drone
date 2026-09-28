@@ -27,6 +27,7 @@ func _read():
 	set_process_input(true)
 
 func _input(event: InputEvent):
+	print(event)
 	if event is InputEventJoypadMotion:
 		match event.axis:
 			2:

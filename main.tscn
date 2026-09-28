@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bqmgsulmqb87f" path="res://main.gd" id="1_0xm2m"]
 [ext_resource type="PackedScene" uid="uid://c3qrvdtrwck87" path="res://player.tscn" id="1_ig7tw"]
+[ext_resource type="Script" uid="uid://fbr72ojj5bhc" path="res://pausa.gd" id="3_h2yge"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ig7tw"]
 albedo_color = Color(1, 0, 0, 1)
@@ -21,7 +22,20 @@ use_collision = true
 size = Vector3(12, 1, 12)
 material = SubResource("StandardMaterial3D_ig7tw")
 
-[node name="Pausa" type="ColorRect" parent="." unique_id=1606571794]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1687184606]
+layer = -1
+
+[node name="Pausa" type="ColorRect" parent="CanvasLayer" unique_id=1606571794]
+process_mode = 3
 offset_right = 639.0
 offset_bottom = 479.0
 color = Color(0, 0, 0, 0.21176471)
+script = ExtResource("3_h2yge")
+
+[node name="Label" type="Label" parent="CanvasLayer/Pausa" unique_id=1903392102]
+layout_mode = 0
+offset_left = 307.0
+offset_top = 214.0
+offset_right = 327.0
+offset_bottom = 237.0
+text = ":)"

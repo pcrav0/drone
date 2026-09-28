@@ -26,7 +26,3 @@ func _notification(evento):
 			 "pos-z": $Player.position.z,
 		})
 		db.close_db()
-
-func _process(_delta: float) -> void:
-	if Input.is_action_just_pressed("pausar"):
-		$Player.get_tree().paused = !$Player.get_tree().paused
