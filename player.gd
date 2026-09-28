@@ -15,7 +15,7 @@ var aceleracao_das_asas := 0.0
 const ACELERACAO_DAS_ASAS_BASE := 0.1
 
 var rotacao_x: float = 0
-var rotacao_y: float = 0
+var rotacao_z: float = 0
 
 func _enter_tree() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
@@ -31,9 +31,9 @@ func _input(event: InputEvent):
 	if event is InputEventJoypadMotion:
 		match event.axis: # BUG: se isso nao for colocado em uma fila pode se perder valores
 			2:
-				rotacao_x = -event.axis_value
+				rotacao_z = -event.axis_value
 			3:
-				rotacao_y = -event.axis_value
+				rotacao_x = -event.axis_value
 
 	match event:
 		InputEventMouse:
@@ -43,8 +43,8 @@ func _input(event: InputEvent):
 
 func _process(_delta: float) -> void:
 	if false:
-		rotate_y(rotacao_x * JOYSTICK_CAMERA_SENSIBILIDADE)
-		$Cabeca.rotate_x(rotacao_y * JOYSTICK_CAMERA_SENSIBILIDADE)
+		rotate_y(rotacao_z * JOYSTICK_CAMERA_SENSIBILIDADE)
+		$Cabeca.rotate_x(rotacao_x * JOYSTICK_CAMERA_SENSIBILIDADE)
 		$Cabeca.rotation.x = clamp($Cabeca.rotation.x, -PI / 2, PI / 2)
 
 	if Input.is_action_just_pressed("camera"):
@@ -80,26 +80,36 @@ func _physics_process(delta: float) -> void:
 		var forca := MASSA * aceleracao
 		print(aceleracao, " ", forca)
 
-	if true:
-		print(rotation)
-		var c := ROTACAO_SENSIBILIDADE * delta
-		if abs(rotacao_x) > 0.1 or abs(rotacao_y) > 0.1:
-			quaternion *= Quaternion(Vector3(0, 0, 1), rotacao_x * c)
-			quaternion *= Quaternion(Vector3(1, 0, 0), -1 * rotacao_y * c)
-		if abs(rotation.z) >= 0.1:
-			quaternion *= Quaternion(Vector3(0, 0, 1), -1 * sign(rotation.z) * c/5)
-		if abs(rotation.x) >= 0.1:
-			quaternion *= Quaternion(Vector3(1, 0, 0), -1 * sign(rotation.x) * c/5)
-		#quaternion *= Quaternion(Vector3(0, 0, 1), move_toward(rotation.z, 0, sign(rotation.z) * c))
-		#rotate_x(-1 * rotacao_x * ROTACAO_SENSIBILIDADE * delta)
-		#rotate_x(move_toward(rotation.x, 0, 0.01))
-		#rotate_x(rotate_toward(rotation.x, 0, 0.5))
-		#rotate_z(-1 * rotacao_y * ROTACAO_SENSIBILIDADE * delta)
-		#var c = 0.01
-		#rotate_z(move_toward(rotation.z, 0, 0.01))
-
 	if is_on_floor() and not (Input.is_action_pressed("cima") || Input.is_action_pressed("baixo")):
 		velocity = Vector3.ZERO
+
+
+	if true: # controle PID
+		var c := ROTACAO_SENSIBILIDADE * delta
+		
+		# rotacao em z e x
+		if abs(rotacao_z) > 0.1 or abs(rotacao_x) > 0.1:
+			quaternion *= Quaternion(Vector3(1, 0, 0), -1 * rotacao_x * c/2)
+			quaternion *= Quaternion(Vector3(0, 0, 1), rotacao_z * c/2)
+		if abs(rotation.x) >= 0.1:
+			quaternion *= Quaternion(Vector3(1, 0, 0), -1 * sign(rotation.x) * c/5)
+		elif abs(rotacao_x) < 0.01:
+			rotation.x = 0
+		if abs(rotation.z) >= 0.1:
+			quaternion *= Quaternion(Vector3(0, 0, 1), -1 * sign(rotation.z) * c/5)
+		elif abs(rotacao_z) < 0.01:
+			rotation.z = 0
+
+		# rocatcao em y
+		var y := 0
+		if Input.is_action_pressed("rotacao_y_esquerda"):
+			y += 1
+		if Input.is_action_pressed("rotacao_y_direita"):
+			y -= 1
+		quaternion *= Quaternion(Vector3(0, 1, 0), 0.3 * y * c)
+	
+		# atualizando rotacao em relacao a nova rotacao
+		velocity += Vector3(rotacao_x, 0, -rotacao_z) * c
 
 	for i in range($Asa.get_children().size()):
 		var it := $Asa.get_child(i)

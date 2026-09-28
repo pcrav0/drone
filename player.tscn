@@ -4,13 +4,15 @@
 [ext_resource type="PackedScene" uid="uid://2qy6fbso1wio" path="res://helices.glb" id="3_i3pqv"]
 [ext_resource type="PackedScene" uid="uid://dgdiqtrrk17jt" path="res://drone2.blend" id="4_hqtel"]
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_dgfsc"]
+[sub_resource type="BoxShape3D" id="BoxShape3D_sweqy"]
+size = Vector3(1, 0.2, 1.1)
 
 [node name="Player" type="CharacterBody3D" unique_id=1917536553]
 script = ExtResource("1_4flbx")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1220111063]
-shape = SubResource("CapsuleShape3D_dgfsc")
+transform = Transform3D(0.88, 0, 0, 0, 0.88, 0, 0, 0, 0.88, 0, 0.34799996, -0.256)
+shape = SubResource("BoxShape3D_sweqy")
 
 [node name="Cabeca" type="Node3D" parent="." unique_id=1058032853]
 
