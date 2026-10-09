@@ -5,11 +5,11 @@ const VELOCIDADE_VOO = 20.0
 const VELOCIDADE_VOO_MAX = 30.0
 const MOUSE_SENSIBILIDADE = 0.01
 const MASSA = 0.1
-const JOYSTICK_CAMERA_SENSIBILIDADE = 0.05
+#const JOYSTICK_CAMERA_SENSIBILIDADE = 0.05
 const ROTACAO_SENSIBILIDADE = 5
 
-var camera_i := 0
-@onready var camera_offets := [Vector3(0, 0.6, -0.3), $Cabeca/Camera3D.position]
+#var camera_i := 0
+#@onready var camera_offets := [Vector3(0, 0.6, -0.3), $RemoteTransform3D.position]
 
 var aceleracao_das_asas := 0.0
 const ACELERACAO_DAS_ASAS_BASE := 0.1
@@ -24,7 +24,7 @@ func _enter_tree() -> void:
 func _leave_tree():
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
-func _read():
+func _ready():
 	set_process_input(true)
 
 func _input(event: InputEvent):
@@ -35,22 +35,23 @@ func _input(event: InputEvent):
 			3:
 				rotacao_x = -event.axis_value
 
-	match event:
-		InputEventMouse:
-			rotate_y(-event.relative.x * MOUSE_SENSIBILIDADE)
-			$Cabeca.rotate_x(-event.relative.y * MOUSE_SENSIBILIDADE)
-			$Cabeca.rotation.x = clamp($Cabeca.rotation.x, -PI / 2, PI / 2)
+	#match event:
+	#	InputEventMouse:
+	#		rotate_y(-event.relative.x * MOUSE_SENSIBILIDADE)
+	#		$Cabeca.rotate_x(-event.relative.y * MOUSE_SENSIBILIDADE)
+	#de		$Cabeca.rotation.x = clamp($Cabeca.rotation.x, -PI / 2, PI / 2)
 
 func _process(_delta: float) -> void:
-	if false:
-		rotate_y(rotacao_z * JOYSTICK_CAMERA_SENSIBILIDADE)
-		$Cabeca.rotate_x(rotacao_x * JOYSTICK_CAMERA_SENSIBILIDADE)
-		$Cabeca.rotation.x = clamp($Cabeca.rotation.x, -PI / 2, PI / 2)
+	return
+	#if false:
+	#	rotate_y(rotacao_z * JOYSTICK_CAMERA_SENSIBILIDADE)
+	#	$Cabeca.rotate_x(rotacao_x * JOYSTICK_CAMERA_SENSIBILIDADE)
+	#	$Cabeca.rotation.x = clamp($Cabeca.rotation.x, -PI / 2, PI / 2)
 
-	if Input.is_action_just_pressed("camera"):
-		$Cabeca/Camera3D.position = camera_offets[camera_i]
-		camera_i += 1
-		camera_i %= camera_offets.size()
+	#if Input.is_action_just_pressed("camera"):
+		#$Cabeca/Camera3D.position = camera_offets[camera_i]
+		#camera_i += 1
+		#camera_i %= camera_offets.size()
 
 func _physics_process(delta: float) -> void:
 	var velocidade_antiga := velocity
@@ -83,10 +84,13 @@ func _physics_process(delta: float) -> void:
 	if is_on_floor() and not (Input.is_action_pressed("cima") || Input.is_action_pressed("baixo")):
 		velocity = Vector3.ZERO
 
-
 	if true: # controle PID
 		var c := ROTACAO_SENSIBILIDADE * delta
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> bbad319 (camera fixa)
 		# rotacao em z e x
 		if abs(rotacao_z) > 0.1 or abs(rotacao_x) > 0.1:
 			quaternion *= Quaternion(Vector3(1, 0, 0), -1 * rotacao_x * c/2)
@@ -110,7 +114,7 @@ func _physics_process(delta: float) -> void:
 
 		# atualizando rotacao em relacao a nova rotacao
 		velocity += Vector3(-rotacao_x, 0, -rotacao_z) * c
-
+			
 	for i in range($Asa.get_children().size()):
 		var it := $Asa.get_child(i)
 		var n : int = -1 if i % 2 == 0 else 1

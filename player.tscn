@@ -14,11 +14,6 @@ script = ExtResource("1_4flbx")
 transform = Transform3D(0.88, 0, 0, 0, 0.88, 0, 0, 0, 0.88, 0, 0.34799996, -0.256)
 shape = SubResource("BoxShape3D_sweqy")
 
-[node name="Cabeca" type="Node3D" parent="." unique_id=1058032853]
-
-[node name="Camera3D" type="Camera3D" parent="Cabeca" unique_id=1979452329]
-transform = Transform3D(1, -1.4950174e-08, -2.636117e-09, 1.4950173e-08, 0.9396927, 0.34202015, -2.6361209e-09, -0.34202015, 0.9396927, 0.1, 2.5, 3.2)
-
 [node name="Asa" type="Node3D" parent="." unique_id=1237396792]
 
 [node name="A" parent="Asa" unique_id=694852632 instance=ExtResource("3_i3pqv")]

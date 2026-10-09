@@ -17,6 +17,12 @@ func _ready() -> void:
 		}
 	)
 
+func _process(delta: float):
+	if Input.is_action_pressed("rotacao_y_esquerda"):
+		$Camera.rotate_y(delta * 5 * 0.3)
+	if Input.is_action_pressed("rotacao_y_direita"):
+		$Camera.rotate_y(delta * -5 * 0.3)
+
 func _notification(evento):
 	if evento == NOTIFICATION_WM_CLOSE_REQUEST:
 		db.insert_row("save", {
