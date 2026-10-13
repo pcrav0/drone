@@ -1,0 +1,26 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" uid="uid://c2gkl8la40164" path="res://modelos/arvore_vermelha.glb" id="1_hhjx7"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_4hj86"]
+size = Vector3(100, 0.1, 100)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mhee4"]
+albedo_color = Color(0.07289531, 0.36958438, 9.62615e-08, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_4hj86"]
+size = Vector3(100, 0.1, 100)
+
+[node name="Node3D" type="Node3D" unique_id=761139989]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=784013084]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D" unique_id=1092662527]
+mesh = SubResource("BoxMesh_4hj86")
+surface_material_override/0 = SubResource("StandardMaterial3D_mhee4")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D" unique_id=2085623200]
+shape = SubResource("BoxShape3D_4hj86")
+
+[node name="Root Scene" parent="StaticBody3D" unique_id=1035766551 instance=ExtResource("1_hhjx7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -55.126892, -0.15466309, 0.0131073)
