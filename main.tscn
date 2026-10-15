@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://bqmgsulmqb87f" path="res://main.gd" id="1_0xm2m"]
 [ext_resource type="PackedScene" uid="uid://c3qrvdtrwck87" path="res://player.tscn" id="1_ig7tw"]
 [ext_resource type="Script" uid="uid://fbr72ojj5bhc" path="res://pausa.gd" id="3_h2yge"]
+[ext_resource type="PackedScene" path="res://node_3d2.tscn" id="4_1bvp3"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ig7tw"]
 albedo_color = Color(1, 0, 0, 1)
@@ -48,3 +49,6 @@ offset_top = 214.0
 offset_right = 327.0
 offset_bottom = 237.0
 text = ":)"
+
+[node name="Node3D" parent="." unique_id=761139989 instance=ExtResource("4_1bvp3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.5, 0.5, -2.3)
