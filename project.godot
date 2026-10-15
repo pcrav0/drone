@@ -10,23 +10,13 @@ config_version=5
 
 [application]
 
-<<<<<<< HEAD
-config/name="mapa"
-config/features=PackedStringArray("4.7", "Forward Plus")
-=======
 config/name="drone"
 run/main_scene="uid://qoaysumqgimj"
 config/features=PackedStringArray("4.7", "GL Compatibility")
->>>>>>> 95bed9fe2d53923bce4e3f427017205caac0c87b
 config/icon="res://icon.svg"
 
 [display]
 
-<<<<<<< HEAD
-window/stretch/mode="canvas_items"
-window/stretch/aspect="expand"
-
-=======
 window/size/viewport_width=640
 window/size/viewport_height=480
 window/stretch/mode="canvas_items"
@@ -106,7 +96,6 @@ rotacao_y_direita={
 ]
 }
 
->>>>>>> 95bed9fe2d53923bce4e3f427017205caac0c87b
 [physics]
 
 3d/physics_engine="Jolt Physics"
@@ -114,8 +103,5 @@ rotacao_y_direita={
 [rendering]
 
 rendering_device/driver.windows="d3d12"
-<<<<<<< HEAD
-=======
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
->>>>>>> 95bed9fe2d53923bce4e3f427017205caac0c87b

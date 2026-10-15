@@ -86,11 +86,7 @@ func _physics_process(delta: float) -> void:
 
 	if true: # controle PID
 		var c := ROTACAO_SENSIBILIDADE * delta
-<<<<<<< HEAD
 
-=======
-	
->>>>>>> bbad319 (camera fixa)
 		# rotacao em z e x
 		if abs(rotacao_z) > 0.1 or abs(rotacao_x) > 0.1:
 			quaternion *= Quaternion(Vector3(1, 0, 0), -1 * rotacao_x * c/2)
@@ -114,7 +110,7 @@ func _physics_process(delta: float) -> void:
 
 		# atualizando rotacao em relacao a nova rotacao
 		velocity += Vector3(-rotacao_x, 0, -rotacao_z) * c
-			
+
 	for i in range($Asa.get_children().size()):
 		var it := $Asa.get_child(i)
 		var n : int = -1 if i % 2 == 0 else 1
