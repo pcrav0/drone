@@ -5,7 +5,7 @@ const VELOCIDADE_VOO = 20.0
 const VELOCIDADE_VOO_MAX = 30.0
 const MOUSE_SENSIBILIDADE = 0.01
 const MASSA = 0.1
-#const JOYSTICK_CAMERA_SENSIBILIDADE = 0.05
+const JOYSTICK_CAMERA_SENSIBILIDADE = 0.05
 const ROTACAO_SENSIBILIDADE = 5
 
 #var camera_i := 0
@@ -35,18 +35,14 @@ func _input(event: InputEvent):
 			3:
 				rotacao_x = -event.axis_value
 
-	#match event:
-	#	InputEventMouse:
-	#		rotate_y(-event.relative.x * MOUSE_SENSIBILIDADE)
-	#		$Cabeca.rotate_x(-event.relative.y * MOUSE_SENSIBILIDADE)
-	#de		$Cabeca.rotation.x = clamp($Cabeca.rotation.x, -PI / 2, PI / 2)
+	if event is InputEventMouseMotion:
+		pass # print(event)
 
 func _process(_delta: float) -> void:
-	return
-	#if false:
-	#	rotate_y(rotacao_z * JOYSTICK_CAMERA_SENSIBILIDADE)
-	#	$Cabeca.rotate_x(rotacao_x * JOYSTICK_CAMERA_SENSIBILIDADE)
-	#	$Cabeca.rotation.x = clamp($Cabeca.rotation.x, -PI / 2, PI / 2)
+	if false:
+		rotate_y(rotacao_z * JOYSTICK_CAMERA_SENSIBILIDADE)
+		$Cabeca.rotate_x(rotacao_x * JOYSTICK_CAMERA_SENSIBILIDADE)
+		$Cabeca.rotation.x = clamp($Cabeca.rotation.x, -PI / 2, PI / 2)
 
 	#if Input.is_action_just_pressed("camera"):
 		#$Cabeca/Camera3D.position = camera_offets[camera_i]
@@ -75,11 +71,12 @@ func _physics_process(delta: float) -> void:
 	velocity.y += get_gravity().y * delta
 	velocity.y = clamp(velocity.y, -VELOCIDADE_VOO_MAX, VELOCIDADE_VOO_MAX)
 
-	if false:
+	if true:
 		var delta_vel := velocity - velocidade_antiga
 		var aceleracao := delta_vel / delta
 		var forca := MASSA * aceleracao
-		print(aceleracao, " ", forca)
+		$HUD/Aceleracao.text = "aceleração: %.2v" % aceleracao
+		$HUD/Forca.text = "força: %.2v" % forca
 
 	if is_on_floor() and not (Input.is_action_pressed("cima") || Input.is_action_pressed("baixo")):
 		velocity = Vector3.ZERO
@@ -119,4 +116,7 @@ func _physics_process(delta: float) -> void:
 		aceleracao_das_asas -= 0.1
 		aceleracao_das_asas = clamp(aceleracao_das_asas, 0.0, 30)
 
+	$HUD/Rotacao.text = "rotação: %.2v" % rotation
+	$HUD/Posicao.text = "posição: %.2v" % position
+	$HUD/Velocidade.text = "velocidade: %.2v" % velocity
 	move_and_slide()

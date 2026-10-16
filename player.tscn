@@ -30,3 +30,51 @@ transform = Transform3D(0.008, 0, 0, 0, 0.008, 0, 0, 0, 0.008, -0.40859717, 0.42
 
 [node name="drone2" parent="." unique_id=712471933 instance=ExtResource("4_hqtel")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.115, 0.475, -0.245)
+
+[node name="HUD" type="Control" parent="." unique_id=1849857676]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 50.0
+offset_top = 68.0
+offset_right = 90.0
+offset_bottom = 108.0
+
+[node name="Posicao" type="Label" parent="HUD" unique_id=938646363]
+layout_mode = 0
+offset_left = -51.0
+offset_top = -69.0
+offset_right = -11.0
+offset_bottom = -20.0
+text = "Pos"
+
+[node name="Rotacao" type="Label" parent="HUD" unique_id=156770123]
+layout_mode = 0
+offset_left = -52.0
+offset_top = -44.0
+offset_right = -12.0
+offset_bottom = 5.0
+text = "Rot"
+
+[node name="Velocidade" type="Label" parent="HUD" unique_id=1515964881]
+layout_mode = 0
+offset_left = -50.0
+offset_top = -20.0
+offset_right = -10.0
+offset_bottom = 29.0
+text = "Vel"
+
+[node name="Aceleracao" type="Label" parent="HUD" unique_id=1884869355]
+layout_mode = 0
+offset_left = -50.0
+offset_top = 6.0
+offset_right = -10.0
+offset_bottom = 55.0
+text = "Acc"
+
+[node name="Forca" type="Label" parent="HUD" unique_id=2084274052]
+layout_mode = 0
+offset_left = -50.0
+offset_top = 35.0
+offset_right = -10.0
+offset_bottom = 84.0
+text = "Foc"
