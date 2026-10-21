@@ -63,14 +63,6 @@ func _physics_process(delta: float) -> void:
 	direction += Vector3(0, 1, 0)
 	direction *= 0.75
 
-	if Input.is_action_pressed("cima"):
-		velocity += direction * VELOCIDADE_VOO * delta
-	elif Input.is_action_pressed("baixo"):
-		velocity -= direction * VELOCIDADE_VOO * delta
-
-	velocity.y += get_gravity().y * delta
-	velocity.y = clamp(velocity.y, -VELOCIDADE_VOO_MAX, VELOCIDADE_VOO_MAX)
-
 	if true:
 		var delta_vel := velocity - velocidade_antiga
 		var aceleracao := delta_vel / delta
@@ -81,9 +73,9 @@ func _physics_process(delta: float) -> void:
 	if is_on_floor() and not (Input.is_action_pressed("cima") || Input.is_action_pressed("baixo")):
 		velocity = Vector3.ZERO
 
-	if true: # controle PID
-		var c := ROTACAO_SENSIBILIDADE * delta
+	var c := ROTACAO_SENSIBILIDADE * delta
 
+	if true: # controle PID
 		# rotacao em z e x
 		if abs(rotacao_z) > 0.1 or abs(rotacao_x) > 0.1:
 			quaternion *= Quaternion(Vector3(1, 0, 0), -1 * rotacao_x * c/2)
@@ -105,8 +97,22 @@ func _physics_process(delta: float) -> void:
 			y -= 1
 		quaternion *= Quaternion(Vector3(0, 1, 0), 0.3 * y * c)
 
-		# atualizando rotacao em relacao a nova rotacao
-		velocity += Vector3(-rotacao_x, 0, -rotacao_z) * c
+	var vel = Vector3.ZERO
+	vel += Vector3(-rotacao_z, 0, -rotacao_x) * c
+
+	var basis = Basis.from_euler(rotation).inverse()
+
+	if Input.is_action_pressed("cima"):
+		vel += direction * VELOCIDADE_VOO * delta
+	elif Input.is_action_pressed("baixo"):
+		vel -= direction * VELOCIDADE_VOO * delta
+
+	vel.y += get_gravity().y * delta
+	vel.y = clamp(vel.y, -VELOCIDADE_VOO_MAX, VELOCIDADE_VOO_MAX)
+
+	print(rotation.y)
+	#vel = vel.rotated(Vector3(rotation.y, 0, rotation.y), quaternion.get_angle())
+	velocity += vel * basis#.rotated(quaternion.normalized().get_axis(), quaternion.get_angle())
 
 	for i in range($Asa.get_children().size()):
 		var it := $Asa.get_child(i)
@@ -119,4 +125,5 @@ func _physics_process(delta: float) -> void:
 	$HUD/Rotacao.text = "rotação: %.2v" % rotation
 	$HUD/Posicao.text = "posição: %.2v" % position
 	$HUD/Velocidade.text = "velocidade: %.2v" % velocity
+
 	move_and_slide()
