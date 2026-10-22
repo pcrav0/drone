@@ -57,18 +57,10 @@ func _physics_process(delta: float) -> void:
 		position.y = 2
 		velocity = Vector3.ZERO
 
-	var input_dir := Input.get_vector("esquerda", "direita", "frente", "tras")
-	var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+	#var input_dir := Input.get_vector("esquerda", "direita", "frente", "tras")
+	#var direction := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 
-	direction += Vector3(0, 1, 0)
-	direction *= 0.75
-
-	if true:
-		var delta_vel := velocity - velocidade_antiga
-		var aceleracao := delta_vel / delta
-		var forca := MASSA * aceleracao
-		$HUD/Aceleracao.text = "aceleração: %.2v" % aceleracao
-		$HUD/Forca.text = "força: %.2v" % forca
+	#direction *= 0.75
 
 	if is_on_floor() and not (Input.is_action_pressed("cima") || Input.is_action_pressed("baixo")):
 		velocity = Vector3.ZERO
@@ -96,12 +88,18 @@ func _physics_process(delta: float) -> void:
 		if Input.is_action_pressed("rotacao_y_direita"):
 			y -= 1
 		quaternion *= Quaternion(Vector3(0, 1, 0), 0.3 * y * c)
+		
+		# max / min
+		var angle = PI/4
+		rotation.x = clampf(rotation.x, -angle, angle)
+		rotation.z = clampf(rotation.z, -angle, angle)
 
 	var vel = Vector3.ZERO
 	vel += Vector3(-rotacao_z, 0, -rotacao_x) * c
 
-	var basis = Basis.from_euler(rotation).inverse()
+	var vel_basis = Basis.from_euler(rotation).inverse()
 
+	var direction = Vector3(0, 1, 0)
 	if Input.is_action_pressed("cima"):
 		vel += direction * VELOCIDADE_VOO * delta
 	elif Input.is_action_pressed("baixo"):
@@ -110,9 +108,7 @@ func _physics_process(delta: float) -> void:
 	vel.y += get_gravity().y * delta
 	vel.y = clamp(vel.y, -VELOCIDADE_VOO_MAX, VELOCIDADE_VOO_MAX)
 
-	print(rotation.y)
-	#vel = vel.rotated(Vector3(rotation.y, 0, rotation.y), quaternion.get_angle())
-	velocity += vel * basis#.rotated(quaternion.normalized().get_axis(), quaternion.get_angle())
+	velocity += vel * vel_basis
 
 	for i in range($Asa.get_children().size()):
 		var it := $Asa.get_child(i)
@@ -125,5 +121,12 @@ func _physics_process(delta: float) -> void:
 	$HUD/Rotacao.text = "rotação: %.2v" % rotation
 	$HUD/Posicao.text = "posição: %.2v" % position
 	$HUD/Velocidade.text = "velocidade: %.2v" % velocity
+
+	if true:
+		var delta_vel := velocity - velocidade_antiga
+		var aceleracao := delta_vel / delta
+		var forca := MASSA * aceleracao
+		$HUD/Aceleracao.text = "aceleração: %.2v" % aceleracao
+		$HUD/Forca.text = "força: %.2v" % forca
 
 	move_and_slide()

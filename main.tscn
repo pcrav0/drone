@@ -9,13 +9,13 @@
 script = ExtResource("1_0xm2m")
 
 [node name="Camera" type="Camera3D" parent="." unique_id=1515699338]
-transform = Transform3D(1, 0, 0, 0, 0.9396927, 0.34202015, 0, -0.34202015, 0.9396927, 0, 2.655, 2.8000002)
+transform = Transform3D(1, 0, 0, 0, 0.9170601, -0.39874908, 0, 0.39874908, 0.9170601, 0, 2.155, 3)
 
 [node name="Player" parent="." unique_id=1917536553 instance=ExtResource("1_ig7tw")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8000001, 1.1)
 
 [node name="RemoteTransform3D" type="RemoteTransform3D" parent="Player" unique_id=992019959]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8549999, 1.7)
+transform = Transform3D(1, 0, 0, 0, 0.9170601, -0.39874908, 0, 0.39874908, 0.9170601, 0, 1.3549999, 1.9)
 visible = false
 remote_path = NodePath("../../Camera")
 update_rotation = false
@@ -43,4 +43,4 @@ offset_bottom = 237.0
 text = ":)"
 
 [node name="Node3D" parent="." unique_id=761139989 instance=ExtResource("4_1bvp3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.2000003, 0.6, -2.3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.2000003, 0.70000005, -2.3)
